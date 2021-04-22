@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import Link from 'next/link';
 import Image from 'next/image';
 import { GetStaticProps, NextPage } from 'next';
 import { ptBR } from 'date-fns/locale';
@@ -12,7 +14,6 @@ type Episode = {
   id: string;
   title: string;
   thumbnail: string;
-  description: string;
   members: string[];
   duration: number;
   durationAsString: string;
@@ -83,7 +84,9 @@ const Home: NextPage<HomeProps> = ({ allEpisodes, latestEpisodes }) => {
               </div>
 
               <div className={styles.episodeDetails}>
-                <a href="@">{episode.title}</a>
+                <Link href={`/episodes/${episode.id}`}>
+                  <a>{episode.title}</a>
+                </Link>
 
                 <p>{episode.members}</p>
 
@@ -105,17 +108,19 @@ const Home: NextPage<HomeProps> = ({ allEpisodes, latestEpisodes }) => {
 
         <table cellSpacing={0}>
           <thead>
-            <th />
+            <tr>
+              <th />
 
-            <th>Podcast</th>
+              <th>Podcast</th>
 
-            <th>Integrantes</th>
+              <th>Integrantes</th>
 
-            <th>Data</th>
+              <th>Data</th>
 
-            <th>Duração</th>
+              <th>Duração</th>
 
-            <th />
+              <th />
+            </tr>
           </thead>
 
           <tbody>
@@ -132,7 +137,9 @@ const Home: NextPage<HomeProps> = ({ allEpisodes, latestEpisodes }) => {
                 </td>
 
                 <td>
-                  <a href="2">{episode.title}</a>
+                  <Link href={`/episodes/${episode.id}`}>
+                    <a>{episode.title}</a>
+                  </Link>
                 </td>
 
                 <td>{episode.members}</td>
