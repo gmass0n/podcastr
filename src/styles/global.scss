@@ -26,10 +26,14 @@ body {
   background: var(--gray-50);
 }
 
+html {
+  font-size: 90.5%;
+}
+
 body,
 input,
 textarea {
-  font: 500 1rem 'Inter', sans-serif;
+  font: 500 0.875rem 'Inter', sans-serif;
   color: var(--gray-500);
 }
 
@@ -46,12 +50,9 @@ b {
   color: var(--gray-800);
 }
 
-h1 {
-  font-size: 2rem;
-}
-
+h1,
 h2 {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 button {
@@ -60,12 +61,12 @@ button {
 
 @media (max-width: 1080px) {
   html {
-    font-size: 93.75%;
+    font-size: 80%;
   }
 }
 
 @media (max-width: 720px) {
   html {
-    font-size: 87.5%;
+    font-size: 75.5%;
   }
 }
