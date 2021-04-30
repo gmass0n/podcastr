@@ -1,4 +1,10 @@
-import { createContext, useCallback, useContext, useState } from 'react';
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useState,
+} from 'react';
 
 export type Episode = {
   id: string;
@@ -14,13 +20,18 @@ type PlayerContextData = {
   currentEpisodeIndex: number;
   isPlaying: boolean;
   play(episode: Episode): void;
+  playList(list: Episode[], index: number): void;
   togglePlay(): void;
   setIsPlayingState(state: boolean): void;
 };
 
 const PlayerContext = createContext({} as PlayerContextData);
 
-const PlayerProvider: React.FC = ({ children }) => {
+type PlayerProviderProps = {
+  children: ReactNode;
+};
+
+const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -32,6 +43,12 @@ const PlayerProvider: React.FC = ({ children }) => {
 
       return [...prevState, episode];
     });
+  }, []);
+
+  const playList = useCallback((list: Episode[], index: number) => {
+    setEpisodes(list);
+    setCurrentEpisodeIndex(index);
+    setIsPlaying(true);
   }, []);
 
   const togglePlay = useCallback(() => {
@@ -50,6 +67,7 @@ const PlayerProvider: React.FC = ({ children }) => {
         isPlaying,
         play,
         togglePlay,
+        playList,
         setIsPlayingState,
       }}
     >

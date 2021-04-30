@@ -68,7 +68,9 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 const Home: NextPage<HomeProps> = ({ allEpisodes, latestEpisodes }) => {
-  const { play } = usePlayer();
+  const { playList } = usePlayer();
+
+  const episodesList = [...latestEpisodes, ...allEpisodes];
 
   return (
     <div className={styles.container}>
@@ -76,7 +78,7 @@ const Home: NextPage<HomeProps> = ({ allEpisodes, latestEpisodes }) => {
         <h2>Últimos lançamentos</h2>
 
         <ul>
-          {latestEpisodes.map((episode) => (
+          {latestEpisodes.map((episode, index) => (
             <li key={episode.id}>
               <div style={{ width: '5rem' }}>
                 <Image
@@ -100,7 +102,10 @@ const Home: NextPage<HomeProps> = ({ allEpisodes, latestEpisodes }) => {
                 <span>{episode.durationAsString}</span>
               </div>
 
-              <button type="button" onClick={() => play(episode)}>
+              <button
+                type="button"
+                onClick={() => playList(episodesList, index)}
+              >
                 <img src="/play-green.svg" alt="Tocar episódio" />
               </button>
             </li>
@@ -129,7 +134,7 @@ const Home: NextPage<HomeProps> = ({ allEpisodes, latestEpisodes }) => {
           </thead>
 
           <tbody>
-            {allEpisodes.map((episode) => (
+            {allEpisodes.map((episode, index) => (
               <tr key={episode.id}>
                 <td style={{ width: 72 }}>
                   <Image
@@ -154,7 +159,12 @@ const Home: NextPage<HomeProps> = ({ allEpisodes, latestEpisodes }) => {
                 <td>{episode.durationAsString}</td>
 
                 <td>
-                  <button type="button">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      playList(episodesList, index + latestEpisodes.length)
+                    }
+                  >
                     <img src="/play-green.svg" alt="Tocar episódio" />
                   </button>
                 </td>
