@@ -6,6 +6,8 @@ import { ptBR } from 'date-fns/locale';
 import { format, parseISO } from 'date-fns';
 import { api } from '~/services/api';
 
+import { usePlayer } from '~/hooks/player';
+
 import styles from '~/styles/pages/home.module.scss';
 
 import { convertDurationToTimeString } from '~/utils/convertDurationToTimeString';
@@ -14,10 +16,11 @@ type Episode = {
   id: string;
   title: string;
   thumbnail: string;
-  members: string[];
+  members: string;
   duration: number;
   durationAsString: string;
   publishedAt: string;
+  url: string;
 };
 
 type HomeProps = {
@@ -65,6 +68,8 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 const Home: NextPage<HomeProps> = ({ allEpisodes, latestEpisodes }) => {
+  const { play } = usePlayer();
+
   return (
     <div className={styles.container}>
       <section className={styles.latestEpisodes}>
@@ -95,7 +100,7 @@ const Home: NextPage<HomeProps> = ({ allEpisodes, latestEpisodes }) => {
                 <span>{episode.durationAsString}</span>
               </div>
 
-              <button type="button">
+              <button type="button" onClick={() => play(episode)}>
                 <img src="/play-green.svg" alt="Tocar episódio" />
               </button>
             </li>

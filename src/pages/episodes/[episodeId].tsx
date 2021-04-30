@@ -26,8 +26,20 @@ type EpisodeProps = {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  const { data: episodes } = await api.get<Episode[]>('/episodes', {
+    params: {
+      _limit: 5,
+      _sort: 'published_at',
+      _order: 'desc',
+    },
+  });
+
+  const paths = episodes.map((episode) => ({
+    params: { episodeId: episode.id },
+  }));
+
   return {
-    paths: [],
+    paths,
     fallback: 'blocking',
   };
 };

@@ -1,6 +1,22 @@
+import { useEffect, useState } from 'react';
+
+import Image from 'next/image';
+
+import { usePlayer, Episode } from '~/hooks/player';
+
 import styles from './styles.module.scss';
 
 export const Player = (): JSX.Element => {
+  const { episodes, currentEpisodeIndex } = usePlayer();
+
+  const [episode, setEpisode] = useState<Episode | undefined>(undefined);
+
+  useEffect(() => {
+    if (episodes[currentEpisodeIndex]) {
+      setEpisode(episodes[currentEpisodeIndex]);
+    }
+  }, [episodes, currentEpisodeIndex]);
+
   return (
     <aside className={styles.container}>
       <header>
@@ -9,9 +25,24 @@ export const Player = (): JSX.Element => {
         <strong>Tocando agora</strong>
       </header>
 
-      <div className={styles.emptyPlayer}>
-        <strong>Selecione um podcast agora</strong>
-      </div>
+      {episode ? (
+        <div className={styles.currentEpisode}>
+          <Image
+            width={592}
+            height={592}
+            src={episode.thumbnail}
+            objectFit="cover"
+          />
+
+          <strong>{episode.title}</strong>
+
+          <span>{episode.members}</span>
+        </div>
+      ) : (
+        <div className={styles.emptyPlayer}>
+          <strong>Selecione um podcast agora</strong>
+        </div>
+      )}
 
       <footer className={styles.empty}>
         <div className={styles.progress}>
