@@ -6,27 +6,18 @@ import { ptBR } from 'date-fns/locale';
 import { format, parseISO } from 'date-fns';
 import { api } from '~/services/api';
 
+import { usePlayer, Episode as EpisodeType } from '~/hooks/player';
+
 import styles from '~/styles/pages/episode.module.scss';
 
 import { convertDurationToTimeString } from '~/utils/convertDurationToTimeString';
 
-type Episode = {
-  id: string;
-  title: string;
-  thumbnail: string;
-  description: string;
-  members: string[];
-  duration: number;
-  durationAsString: string;
-  publishedAt: string;
-};
-
 type EpisodeProps = {
-  episode: Episode;
+  episode: EpisodeType;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const { data: episodes } = await api.get<Episode[]>('/episodes', {
+  const { data: episodes } = await api.get<EpisodeType[]>('/episodes', {
     params: {
       _limit: 5,
       _sort: 'published_at',
@@ -74,6 +65,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 const Episode: NextPage<EpisodeProps> = ({ episode }) => {
+  const { play } = usePlayer();
+
   return (
     <div className={styles.container}>
       <div className={styles.thumbnailContainer}>
@@ -88,9 +81,10 @@ const Episode: NextPage<EpisodeProps> = ({ episode }) => {
           height={220}
           src={episode.thumbnail}
           alt={episode.title}
+          objectFit="cover"
         />
 
-        <button type="button">
+        <button type="button" onClick={() => play(episode)}>
           <img src="/play.svg" alt="Tocar episódio" />
         </button>
       </div>

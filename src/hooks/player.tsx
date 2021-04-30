@@ -3,25 +3,33 @@ import {
   ReactNode,
   useCallback,
   useContext,
+  useMemo,
   useState,
 } from 'react';
 
 export type Episode = {
   id: string;
   title: string;
+  thumbnail: string;
+  description: string;
   members: string;
   duration: number;
+  durationAsString: string;
+  publishedAt: string;
   url: string;
-  thumbnail: string;
 };
 
 type PlayerContextData = {
   episodes: Episode[];
   currentEpisodeIndex: number;
   isPlaying: boolean;
+  isLooping: boolean;
+  hasPrevious: boolean;
+  hasNext: boolean;
   play(episode: Episode): void;
   playList(list: Episode[], index: number): void;
   togglePlay(): void;
+  toggleLoop(): void;
   setIsPlayingState(state: boolean): void;
   playNext(): void;
   playPrevious(): void;
@@ -37,6 +45,15 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isLooping, setIsLooping] = useState(false);
+
+  const hasPrevious = useMemo(() => currentEpisodeIndex > 0, [
+    currentEpisodeIndex,
+  ]);
+  const hasNext = useMemo(() => currentEpisodeIndex + 1 < episodes.length, [
+    currentEpisodeIndex,
+    episodes,
+  ]);
 
   const play = useCallback((episode: Episode) => {
     setEpisodes((prevState) => {
@@ -57,33 +74,29 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
     setIsPlaying((prevState) => !prevState);
   }, []);
 
+  const toggleLoop = useCallback(() => {
+    setIsLooping((prevState) => !prevState);
+  }, []);
+
   const setIsPlayingState = useCallback((state: boolean) => {
     setIsPlaying(state);
   }, []);
 
   const playNext = useCallback(() => {
-    setCurrentEpisodeIndex((prevState) => {
-      const nextEpisodeIndex = prevState + 1;
-
-      if (nextEpisodeIndex === episodes.length) {
-        return 0;
-      }
-
-      return nextEpisodeIndex;
-    });
-  }, [episodes]);
+    if (hasNext) {
+      setCurrentEpisodeIndex((prevState) => {
+        return prevState + 1;
+      });
+    }
+  }, [hasNext]);
 
   const playPrevious = useCallback(() => {
-    setCurrentEpisodeIndex((prevState) => {
-      const nextEpisodeIndex = prevState - 1;
-
-      if (prevState === 0) {
-        return episodes.length - 1;
-      }
-
-      return nextEpisodeIndex;
-    });
-  }, [episodes]);
+    if (hasPrevious) {
+      setCurrentEpisodeIndex((prevState) => {
+        return prevState - 1;
+      });
+    }
+  }, [hasPrevious]);
 
   return (
     <PlayerContext.Provider
@@ -91,8 +104,12 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
         episodes,
         currentEpisodeIndex,
         isPlaying,
+        isLooping,
+        hasNext,
+        hasPrevious,
         play,
         togglePlay,
+        toggleLoop,
         playList,
         setIsPlayingState,
         playNext,

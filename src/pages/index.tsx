@@ -6,22 +6,11 @@ import { ptBR } from 'date-fns/locale';
 import { format, parseISO } from 'date-fns';
 import { api } from '~/services/api';
 
-import { usePlayer } from '~/hooks/player';
+import { usePlayer, Episode } from '~/hooks/player';
 
 import styles from '~/styles/pages/home.module.scss';
 
 import { convertDurationToTimeString } from '~/utils/convertDurationToTimeString';
-
-type Episode = {
-  id: string;
-  title: string;
-  thumbnail: string;
-  members: string;
-  duration: number;
-  durationAsString: string;
-  publishedAt: string;
-  url: string;
-};
 
 type HomeProps = {
   latestEpisodes: Episode[];
