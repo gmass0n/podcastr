@@ -23,6 +23,8 @@ type PlayerContextData = {
   playList(list: Episode[], index: number): void;
   togglePlay(): void;
   setIsPlayingState(state: boolean): void;
+  playNext(): void;
+  playPrevious(): void;
 };
 
 const PlayerContext = createContext({} as PlayerContextData);
@@ -59,6 +61,30 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
     setIsPlaying(state);
   }, []);
 
+  const playNext = useCallback(() => {
+    setCurrentEpisodeIndex((prevState) => {
+      const nextEpisodeIndex = prevState + 1;
+
+      if (nextEpisodeIndex === episodes.length) {
+        return 0;
+      }
+
+      return nextEpisodeIndex;
+    });
+  }, [episodes]);
+
+  const playPrevious = useCallback(() => {
+    setCurrentEpisodeIndex((prevState) => {
+      const nextEpisodeIndex = prevState - 1;
+
+      if (prevState === 0) {
+        return episodes.length - 1;
+      }
+
+      return nextEpisodeIndex;
+    });
+  }, [episodes]);
+
   return (
     <PlayerContext.Provider
       value={{
@@ -69,6 +95,8 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
         togglePlay,
         playList,
         setIsPlayingState,
+        playNext,
+        playPrevious,
       }}
     >
       {children}

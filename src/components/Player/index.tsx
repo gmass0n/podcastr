@@ -19,6 +19,8 @@ export const Player = (): JSX.Element => {
     isPlaying,
     togglePlay,
     setIsPlayingState,
+    playNext,
+    playPrevious,
   } = usePlayer();
 
   const [episode, setEpisode] = useState<Episode | undefined>(undefined);
@@ -100,7 +102,7 @@ export const Player = (): JSX.Element => {
             <img src="/shuffle.svg" alt="Embaralhar" />
           </button>
 
-          <button type="button" disabled={!episode}>
+          <button type="button" disabled={!episode} onClick={playPrevious}>
             <img src="/play-previous.svg" alt="Tocar anterior" />
           </button>
 
@@ -117,7 +119,7 @@ export const Player = (): JSX.Element => {
             )}
           </button>
 
-          <button type="button" disabled={!episode}>
+          <button type="button" disabled={!episode} onClick={playNext}>
             <img src="/play-next.svg" alt="Tocar próxima" />
           </button>
 
