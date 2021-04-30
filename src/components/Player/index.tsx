@@ -113,6 +113,7 @@ export const Player = (): JSX.Element => {
               <Slider
                 value={progress}
                 onChange={handleSeek}
+                max={episode.duration}
                 onAfterChange={() => setIsPlayingState(true)}
                 onBeforeChange={() => setIsPlayingState(false)}
                 trackStyle={{ backgroundColor: '#04d361' }}

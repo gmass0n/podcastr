@@ -51,8 +51,9 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
   const [isLooping, setIsLooping] = useState(false);
   const [isShuffling, setIsShuffling] = useState(false);
 
-  const hasPrevious = useMemo(() => currentEpisodeIndex > 0, [
+  const hasPrevious = useMemo(() => isShuffling || currentEpisodeIndex > 0, [
     currentEpisodeIndex,
+    isShuffling,
   ]);
   const hasNext = useMemo(
     () => isShuffling || currentEpisodeIndex + 1 < episodes.length,
@@ -105,10 +106,14 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
   const playPrevious = useCallback(() => {
     if (hasPrevious) {
       setCurrentEpisodeIndex((prevState) => {
+        if (isShuffling) {
+          return Math.floor(Math.random() * episodes.length);
+        }
+
         return prevState - 1;
       });
     }
-  }, [hasPrevious]);
+  }, [hasPrevious, isShuffling, episodes]);
 
   const clearPlayerState = useCallback(() => {
     setEpisodes([]);
