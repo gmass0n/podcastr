@@ -12,7 +12,10 @@ export type Episode = {
 type PlayerContextData = {
   episodes: Episode[];
   currentEpisodeIndex: number;
+  isPlaying: boolean;
   play(episode: Episode): void;
+  togglePlay(): void;
+  setIsPlayingState(state: boolean): void;
 };
 
 const PlayerContext = createContext({} as PlayerContextData);
@@ -20,13 +23,23 @@ const PlayerContext = createContext({} as PlayerContextData);
 const PlayerProvider: React.FC = ({ children }) => {
   const [episodes, setEpisodes] = useState<Episode[]>([]);
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const play = useCallback((episode: Episode) => {
     setEpisodes((prevState) => {
       setCurrentEpisodeIndex(prevState.length);
+      setIsPlaying(true);
 
       return [...prevState, episode];
     });
+  }, []);
+
+  const togglePlay = useCallback(() => {
+    setIsPlaying((prevState) => !prevState);
+  }, []);
+
+  const setIsPlayingState = useCallback((state: boolean) => {
+    setIsPlaying(state);
   }, []);
 
   return (
@@ -34,7 +47,10 @@ const PlayerProvider: React.FC = ({ children }) => {
       value={{
         episodes,
         currentEpisodeIndex,
+        isPlaying,
         play,
+        togglePlay,
+        setIsPlayingState,
       }}
     >
       {children}
