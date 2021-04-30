@@ -1,6 +1,7 @@
 /* eslint-disable react/no-danger */
 import Link from 'next/link';
 import Image from 'next/image';
+import Head from 'next/head';
 import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import { ptBR } from 'date-fns/locale';
 import { format, parseISO } from 'date-fns';
@@ -69,6 +70,10 @@ const Episode: NextPage<EpisodeProps> = ({ episode }) => {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>{episode.title} | Podcastr</title>
+      </Head>
+
       <div className={styles.thumbnailContainer}>
         <Link href="/">
           <button type="button">

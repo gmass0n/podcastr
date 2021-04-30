@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import Link from 'next/link';
 import Image from 'next/image';
+import Head from 'next/head';
 import { GetStaticProps, NextPage } from 'next';
 import { ptBR } from 'date-fns/locale';
 import { format, parseISO } from 'date-fns';
@@ -63,6 +64,10 @@ const Home: NextPage<HomeProps> = ({ allEpisodes, latestEpisodes }) => {
 
   return (
     <div className={styles.container}>
+      <Head>
+        <title>Início | Podcastr</title>
+      </Head>
+
       <section className={styles.latestEpisodes}>
         <h2>Últimos lançamentos</h2>
 

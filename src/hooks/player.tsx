@@ -34,6 +34,7 @@ type PlayerContextData = {
   toggleShuffle(): void;
   setIsPlayingState(state: boolean): void;
   playNext(): void;
+  clearPlayerState(): void;
   playPrevious(): void;
 };
 
@@ -53,10 +54,10 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
   const hasPrevious = useMemo(() => currentEpisodeIndex > 0, [
     currentEpisodeIndex,
   ]);
-  const hasNext = useMemo(() => currentEpisodeIndex + 1 < episodes.length, [
-    currentEpisodeIndex,
-    episodes,
-  ]);
+  const hasNext = useMemo(
+    () => isShuffling || currentEpisodeIndex + 1 < episodes.length,
+    [currentEpisodeIndex, episodes, isShuffling]
+  );
 
   const play = useCallback((episode: Episode) => {
     setEpisodes((prevState) => {
@@ -109,6 +110,11 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
     }
   }, [hasPrevious]);
 
+  const clearPlayerState = useCallback(() => {
+    setEpisodes([]);
+    setCurrentEpisodeIndex(0);
+  }, []);
+
   return (
     <PlayerContext.Provider
       value={{
@@ -127,6 +133,7 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
         setIsPlayingState,
         playNext,
         playPrevious,
+        clearPlayerState,
       }}
     >
       {children}

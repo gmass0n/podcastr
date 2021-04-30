@@ -1,10 +1,12 @@
 /* eslint-disable jsx-a11y/media-has-caption */
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Slider from 'rc-slider';
 import Image from 'next/image';
 
 import { usePlayer, Episode } from '~/hooks/player';
+
+import { convertDurationToTimeString } from '~/utils/convertDurationToTimeString';
 
 import styles from './styles.module.scss';
 
@@ -26,10 +28,13 @@ export const Player = (): JSX.Element => {
     toggleShuffle,
     setIsPlayingState,
     playNext,
+    clearPlayerState,
     playPrevious,
   } = usePlayer();
 
   const [episode, setEpisode] = useState<Episode | undefined>(undefined);
+
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (episodes[currentEpisodeIndex]) {
@@ -46,6 +51,31 @@ export const Player = (): JSX.Element => {
       audioRef.current.play();
     }
   }, [isPlaying]);
+
+  const setupProgressListener = useCallback(() => {
+    if (!audioRef.current) return;
+
+    audioRef.current.currentTime = 0;
+
+    audioRef.current.addEventListener('timeupdate', () => {
+      setProgress(Math.floor(audioRef.current.currentTime));
+    });
+  }, []);
+
+  const handleSeek = useCallback((duration: number) => {
+    if (!audioRef.current) return;
+
+    audioRef.current.currentTime = duration;
+    setProgress(duration);
+  }, []);
+
+  const handleEpisodeEnded = useCallback(() => {
+    if (hasNext) {
+      playNext();
+    } else {
+      clearPlayerState();
+    }
+  }, [hasNext, clearPlayerState, playNext]);
 
   return (
     <aside className={styles.container}>
@@ -76,11 +106,15 @@ export const Player = (): JSX.Element => {
 
       <footer className={episode ? '' : styles.empty}>
         <div className={styles.progress}>
-          <span>00:00</span>
+          <span>{convertDurationToTimeString(progress)}</span>
 
           <div className={styles.slider}>
             {episode ? (
               <Slider
+                value={progress}
+                onChange={handleSeek}
+                onAfterChange={() => setIsPlayingState(true)}
+                onBeforeChange={() => setIsPlayingState(false)}
                 trackStyle={{ backgroundColor: '#04d361' }}
                 railStyle={{ backgroundColor: '#9f75ff' }}
                 handleStyle={{ borderColor: '#04d361', borderWidth: 4 }}
@@ -90,7 +124,7 @@ export const Player = (): JSX.Element => {
             )}
           </div>
 
-          <span>00:00</span>
+          <span>{episode?.durationAsString ?? '00:00:00'}</span>
         </div>
 
         {episode && (
@@ -99,8 +133,10 @@ export const Player = (): JSX.Element => {
             src={episode.url}
             autoPlay
             loop={isLooping}
+            onEnded={handleEpisodeEnded}
             onPlay={() => setIsPlayingState(true)}
             onPause={() => setIsPlayingState(false)}
+            onLoadedMetadata={setupProgressListener}
           />
         )}
 
