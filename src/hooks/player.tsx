@@ -24,12 +24,14 @@ type PlayerContextData = {
   currentEpisodeIndex: number;
   isPlaying: boolean;
   isLooping: boolean;
+  isShuffling: boolean;
   hasPrevious: boolean;
   hasNext: boolean;
   play(episode: Episode): void;
   playList(list: Episode[], index: number): void;
   togglePlay(): void;
   toggleLoop(): void;
+  toggleShuffle(): void;
   setIsPlayingState(state: boolean): void;
   playNext(): void;
   playPrevious(): void;
@@ -46,6 +48,7 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
   const [currentEpisodeIndex, setCurrentEpisodeIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLooping, setIsLooping] = useState(false);
+  const [isShuffling, setIsShuffling] = useState(false);
 
   const hasPrevious = useMemo(() => currentEpisodeIndex > 0, [
     currentEpisodeIndex,
@@ -78,6 +81,10 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
     setIsLooping((prevState) => !prevState);
   }, []);
 
+  const toggleShuffle = useCallback(() => {
+    setIsShuffling((prevState) => !prevState);
+  }, []);
+
   const setIsPlayingState = useCallback((state: boolean) => {
     setIsPlaying(state);
   }, []);
@@ -85,10 +92,14 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
   const playNext = useCallback(() => {
     if (hasNext) {
       setCurrentEpisodeIndex((prevState) => {
+        if (isShuffling) {
+          return Math.floor(Math.random() * episodes.length);
+        }
+
         return prevState + 1;
       });
     }
-  }, [hasNext]);
+  }, [hasNext, episodes, isShuffling]);
 
   const playPrevious = useCallback(() => {
     if (hasPrevious) {
@@ -105,11 +116,13 @@ const PlayerProvider = ({ children }: PlayerProviderProps): JSX.Element => {
         currentEpisodeIndex,
         isPlaying,
         isLooping,
+        isShuffling,
         hasNext,
         hasPrevious,
         play,
         togglePlay,
         toggleLoop,
+        toggleShuffle,
         playList,
         setIsPlayingState,
         playNext,

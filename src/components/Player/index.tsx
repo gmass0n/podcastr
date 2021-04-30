@@ -18,10 +18,12 @@ export const Player = (): JSX.Element => {
     currentEpisodeIndex,
     isPlaying,
     isLooping,
+    isShuffling,
     hasNext,
     hasPrevious,
     togglePlay,
     toggleLoop,
+    toggleShuffle,
     setIsPlayingState,
     playNext,
     playPrevious,
@@ -103,7 +105,12 @@ export const Player = (): JSX.Element => {
         )}
 
         <div className={styles.buttons}>
-          <button type="button" disabled={!episode}>
+          <button
+            type="button"
+            disabled={!episode || episodes.length === 1}
+            onClick={toggleShuffle}
+            className={isShuffling ? styles.isActive : ''}
+          >
             <img src="/shuffle.svg" alt="Embaralhar" />
           </button>
 
