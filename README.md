@@ -1,9 +1,9 @@
 <p align="center">
   <a href="https://github.com/gmass0n/podcastr">
-    <img src="./.github/podcastr-logo.png" alt="Podcastr">
+    <img width="320" src="./.github/podcastr-logo.png" alt="Podcastr">
   </a>
 <p align="center">
-
+  
 <br />
 
 <p align="center">
@@ -18,11 +18,12 @@
 
 <br />
 
-<p>
+<p align="center">
   This project was development with <code>Typescript</code>, <code>Next.js</code>, <code>SASS</code> and others technologies.
 </p>
 
 <br />
+
 <p align="center">
   <a href="https://github.com/gmass0n/podcastr">
     <img src="./.github/preview.png" alt="Preview" height="350">
