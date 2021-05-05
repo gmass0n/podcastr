@@ -25,6 +25,6 @@
 <br />
 <p align="center">
   <a href="https://github.com/gmass0n/podcastr">
-    <img src="./.github/web-mobile.png" alt="WEB&Mobile" height="350">
+    <img src="./.github/preview.png" alt="Preview" height="350">
   </a>
 </p>
