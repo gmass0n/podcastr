@@ -3,6 +3,8 @@
     <img width="250" src="./.github/podcastr-logo.png" alt="Podcastr">
   </a>
 </p>
+
+</br>
   
 <p align="center">
   This project was developed with the purpose of play episodes of audio podcasts easily and quickly.
