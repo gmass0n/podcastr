@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/gmass0n/podcastr">
-    <img src="./.github/podcastr-logo.png" alt="Podcastr">
+    <img width="100" src="./.github/podcastr-logo.png" alt="Podcastr">
   </a>
 <p align="center">
 
