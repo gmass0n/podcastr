@@ -18,11 +18,12 @@
 
 <br />
 
-<p>
+<p align="center">
   This project was development with <code>Typescript</code>, <code>Next.js</code>, <code>SASS</code> and others technologies.
 </p>
 
 <br />
+
 <p align="center">
   <a href="https://github.com/gmass0n/podcastr">
     <img src="./.github/web-mobile.png" alt="WEB&Mobile" height="350">
