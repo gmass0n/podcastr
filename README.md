@@ -26,6 +26,6 @@
 
 <p align="center">
   <a href="https://github.com/gmass0n/podcastr">
-    <img src="./.github/preview.png" alt="Preview" height="350">
+    <img src="./.github/preview.png" alt="Preview" height="300">
   </a>
 </p>
